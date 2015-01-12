@@ -1,0 +1,30 @@
+upstream php-fpm {
+    server unix:///var/run/php5-fpm.sock;
+}
+server {
+    listen       80;
+    root /var/www;
+    index index.html index.htm index.php;
+    
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+    
+    location ~ /\. { deny  all; access_log off; log_not_found off; }
+
+    location  = /favicon.ico { access_log off; log_not_found off; }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_buffers 8 256k;
+        fastcgi_buffer_size 128k;
+        fastcgi_intercept_errors on;
+
+        fastcgi_pass php-fpm;
+        fastcgi_index index.php;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTPS off;
+    }
+}
