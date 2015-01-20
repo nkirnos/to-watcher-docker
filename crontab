@@ -1,2 +1,5 @@
 # m h  dom mon dow   command
-
+*/3 * * * * cd /var/www/to-watcher && /usr/bin/php ./artisan to-watcher:load >> /var/www/to-watcher/storage/logs/to-watcher-load_`date "+\%F"`.log 2>&1
+*/3 * * * * cd /var/www/to-watcher && /usr/bin/php ./artisan to-watcher:push >> /var/www/to-watcher/storage/logs/to-watcher-push_`date "+\%F"`.log 2>&1
+0,30 * * * * cd /var/www/to-watcher && /usr/bin/php ./artisan to-watcher:download-docs --take 50 biblio_globus tui pegas >> /var/www/to-watcher/storage/logs/to-watcher-download-docs_`date "+\%F"`.log 2>&1
+0,30 * * * * cd /var/www/to-watcher && /usr/bin/php ./artisan to-watcher:upload-docs >> /var/www/to-watcher/storage/logs/to-watcher-upload-docs_`date "+\%F"`.log 2>&1
